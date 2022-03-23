@@ -20,9 +20,7 @@ const Main: FC<MainProps> = (props: MainProps) => {
   const queryClient = useQueryClient();
 
   // Queries
-  const { data, status } = useQuery<Project[]>("projects", getAll, {
-    onSuccess: console.log,
-  });
+  const { data, status } = useQuery<Project[]>("projects", getAll);
 
   const mutation = useMutation(addNewProject, {
     onSuccess: () => {
@@ -70,10 +68,10 @@ const Main: FC<MainProps> = (props: MainProps) => {
             </Grid>
           )}
           {data?.map((e) => (
-            <Grid item>
+            <Grid item key={e.id}>
               <ProjectCard title={e.title} description={e.description} />
             </Grid>
-          )) || ""}
+          )) || "Error :("}
         </Grid>
       </Container>
       <Modal open={modalOpen} handleClose={() => setModalOpen(false)}>

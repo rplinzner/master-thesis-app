@@ -3,8 +3,8 @@ import { BrowserRouter } from "react-router-dom";
 import AppBar from "./layout";
 import RoutedContent from "./pages";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { ReactQueryDevtools } from "react-query-devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const queryClient = new QueryClient();
 
@@ -31,7 +31,7 @@ function App() {
             <RoutedContent />
           </ThemeProvider>
         </BrowserRouter>
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </div>
   );
