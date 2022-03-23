@@ -3,6 +3,10 @@ import { BrowserRouter } from "react-router-dom";
 import AppBar from "./layout";
 import RoutedContent from "./pages";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ReactQueryDevtools } from "react-query-devtools";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 const theme = createTheme({
   palette: {
@@ -11,6 +15,7 @@ const theme = createTheme({
     },
     secondary: {
       main: "#b9929f",
+      contrastText: "#fff",
     },
   },
 });
@@ -18,13 +23,16 @@ const theme = createTheme({
 function App() {
   return (
     <div>
-      <CssBaseline />
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <AppBar />
-          <RoutedContent />
-        </ThemeProvider>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <CssBaseline />
+        <BrowserRouter>
+          <ThemeProvider theme={theme}>
+            <AppBar />
+            <RoutedContent />
+          </ThemeProvider>
+        </BrowserRouter>
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      </QueryClientProvider>
     </div>
   );
 }
