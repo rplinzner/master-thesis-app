@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateProjectDto } from './create-project.dto';
 import { Project } from './project.entity';
 import { ProjectsService } from './projects.service';
@@ -10,6 +10,11 @@ export class ProjectsController {
   @Get()
   getAll(): Promise<Project[]> {
     return this.projectsService.getAllProjects();
+  }
+
+  @Get(':id')
+  getById(@Param('id') id: string) {
+    return this.projectsService.getById(id);
   }
 
   @Post()

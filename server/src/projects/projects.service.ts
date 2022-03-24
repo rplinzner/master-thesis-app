@@ -17,4 +17,8 @@ export class ProjectsService {
   getAllProjects() {
     return this.projectsRepository.getAllProjects();
   }
+
+  getById(id: string) {
+    return this.projectsRepository.findOne({ id });
+  }
 }

@@ -61,7 +61,7 @@ const Main: FC<MainProps> = (props: MainProps) => {
             <Typography variant="h3">Wybór projektu</Typography>
           </Grid>
         </Grid>
-        <Grid container spacing={2} justifyContent="center">
+        <Grid container spacing={2} justifyContent="center" mb={3}>
           {status === "loading" && (
             <Grid item>
               <p>Loading...</p>
@@ -69,7 +69,7 @@ const Main: FC<MainProps> = (props: MainProps) => {
           )}
           {data?.map((e) => (
             <Grid item key={e.id}>
-              <ProjectCard title={e.title} description={e.description} />
+              <ProjectCard title={e.title} description={e.description} id={e.id} />
             </Grid>
           )) || "Error :("}
         </Grid>
