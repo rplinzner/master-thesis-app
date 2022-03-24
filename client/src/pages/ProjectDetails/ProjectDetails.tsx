@@ -1,13 +1,14 @@
 import { css } from "@emotion/css";
 import { Button, Container, Divider, Grid, Typography } from "@mui/material";
 import { getById } from "api/projects";
-import { FC, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { Project } from "types/Project";
 import styled from "@emotion/styled";
 import xml from "./temp";
 import ReactBpmn from "react-bpmn";
+import BpmnJS from "bpmn-js";
 
 interface ProjectDetailsProps {
   className?: string;
@@ -26,6 +27,33 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
     () => getById(id!),
     { onSuccess: console.log }
   );
+
+  const viewer = useRef(new BpmnJS());
+
+  useEffect(() => {
+    if (status === "loading") return;
+
+    async function inner() {
+      try {
+        const { warnings } = await viewer.current.importXML(xml);
+        const canvas = viewer.current.get("canvas");
+        canvas.zoom("fit-viewport");
+        if (warnings.length) {
+          const arr = warnings as any[];
+          const text = arr.reduce((acc, next) => {
+            return `${acc}\n${next.message}`;
+          }, "BPMN Viewer ERROR:");
+          window.alert(text);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    viewer.current.attachTo("div.bpmn-container");
+    inner();
+
+  }, [status]);
 
   if (status === "loading")
     return (
@@ -105,6 +133,10 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
         >
           <ReactBpmn diagramXML={xml} onShown={console.log} />
         </div> */}
+        <div
+          style={{ height: "500px", marginTop: "50px" }}
+          className="bpmn-container"
+        ></div>
       </Container>
     </div>
   );
