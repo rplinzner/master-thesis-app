@@ -20,7 +20,7 @@ export class Microservice {
     eager: true,
     cascade: true,
   })
-  businessGoals: BusinessGoal[];
+  goals: BusinessGoal[];
 
   @ManyToOne(() => Project, (project) => project.microservices, {
     eager: false,

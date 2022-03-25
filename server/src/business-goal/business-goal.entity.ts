@@ -10,15 +10,15 @@ export class BusinessGoal {
   name: string;
 
   @Column('xml', { nullable: true })
-  behavioralDiagram: string;
+  behavioralDiagram: string | null;
 
   @Column('xml', { nullable: true })
-  collaborationScenario: string;
+  collaborationScenario: string | null;
 
   @Column('xml', { nullable: true })
-  exceptionScenario: string;
+  exceptionScenario: string | null;
 
-  @ManyToOne(() => Microservice, (microservice) => microservice.businessGoals, {
+  @ManyToOne(() => Microservice, (microservice) => microservice.goals, {
     eager: false,
     onDelete: 'CASCADE',
   })
