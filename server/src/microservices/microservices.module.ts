@@ -12,5 +12,6 @@ import { MicroservicesService } from './microservices.service';
   ],
   controllers: [MicroservicesController],
   providers: [MicroservicesService, ProjectsService],
+  exports: [MicroservicesService],
 })
 export class MicroservicesModule {}

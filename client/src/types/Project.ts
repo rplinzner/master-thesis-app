@@ -1,3 +1,4 @@
+import { DetailedStructuralDiagram } from "./DetailedStructuralDiagram";
 import { Microservice } from "./Microservice";
 
 export interface CreateProjectDto {
@@ -20,4 +21,6 @@ export interface Project {
   highLevelStructDiagram: string | null;
 
   microservices: Microservice[];
+
+  detailedStructuralDiagrams: DetailedStructuralDiagram[];
 }

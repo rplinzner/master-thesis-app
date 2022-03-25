@@ -1,3 +1,4 @@
+import { DetailedStructuralDiagram } from 'src/detailed-structural-diagram/detailed-structural-diagram.entity';
 import { Microservice } from 'src/microservices/microservice.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
@@ -20,4 +21,14 @@ export class Project {
     cascade: true,
   })
   microservices: Microservice[];
+
+  @OneToMany(
+    () => DetailedStructuralDiagram,
+    (detailedStructuralDiagrams) => detailedStructuralDiagrams.project,
+    {
+      eager: true,
+      cascade: true,
+    },
+  )
+  detailedStructuralDiagrams: DetailedStructuralDiagram[];
 }

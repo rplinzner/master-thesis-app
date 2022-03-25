@@ -21,4 +21,8 @@ export class MicroservicesService {
   async deleteMicroservice(id: string) {
     return (await this.microservicesRepository.delete(id)).affected > 0;
   }
+
+  async getById(id: string) {
+    return this.microservicesRepository.findOne({ id });
+  }
 }

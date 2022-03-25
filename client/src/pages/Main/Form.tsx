@@ -33,7 +33,7 @@ const Form: FC<FormProps> = (props) => {
             margin-bottom: 2rem !important;
           `}
           autoFocus
-          label="Tytuł"
+          label="Nazwa"
           type="title"
           name="title"
           fullWidth

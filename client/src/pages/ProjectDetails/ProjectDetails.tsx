@@ -22,14 +22,11 @@ import { AddDiagramModal, DiagramViewer, Modal } from "components";
 import AddMicroserviceForm from "./AddMicroserviceForm";
 import { addMicroservice, deleteMicroservice } from "api/microservices";
 import DeleteIcon from "@mui/icons-material/Delete";
+import StructuralDiagramsTable from "./StructuralDiagramsTable";
 
 interface ProjectDetailsProps {
   className?: string;
 }
-
-const FlexDiv = styled.div`
-  display: flex;
-`;
 
 const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
   const { className } = props;
@@ -150,35 +147,18 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
             <Typography mb={2} variant="h5">
               Diagramy
             </Typography>
-            <FlexDiv>
-              <Button
-                className={css`
-                  width: 50%;
-                  margin-right: 0.5rem !important;
-                `}
-                variant="contained"
-                onClick={() => setAddDiagramModalOpen(true)}
-              >
-                {`${
-                  data.highLevelStructDiagram ? "Zmień" : "Dodaj"
-                } diagram strukturalny wysokiego poziomu`}
-              </Button>
-
-              <Button
-                className={css`
-                  width: 50%;
-                  margin-left: 0.5rem !important;
-                `}
-                variant="contained"
-              >
-                Dodaj diagram strukturalny szczegółowy (mikroserwisy)
-              </Button>
-            </FlexDiv>
-            <Divider
+            <Button
               className={css`
-                margin: 1rem 0rem !important;
+                margin: 0.5rem 0 !important;
+                width: 100%;
               `}
-            />
+              variant="contained"
+              onClick={() => setAddDiagramModalOpen(true)}
+            >
+              {`${
+                data.highLevelStructDiagram ? "Zmień" : "Dodaj"
+              } diagram strukturalny wysokiego poziomu`}
+            </Button>
             {data.highLevelStructDiagram ? (
               <Button
                 variant="outlined"
@@ -194,6 +174,26 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
                 Brak diagramu strukturalnego wysokiego poziomu!
               </Typography>
             )}
+            <Divider
+              className={css`
+                margin: 1rem 0rem !important;
+              `}
+            />
+            <Button
+              className={css`
+                width: 100%;
+              `}
+              variant="contained"
+            >
+              Dodaj diagram strukturalny szczegółowy (mikroserwisy)
+            </Button>
+
+            <StructuralDiagramsTable
+              className={css`
+                margin-top: 1rem;
+              `}
+              data={data.detailedStructuralDiagrams}
+            />
           </Grid>
         </Grid>
       </Container>
@@ -211,7 +211,7 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
           handleClose={() => setAddMicroserviceModal(false)}
           onSubmit={(e) =>
             addMicroserviceMutation.mutate({
-              name: e.title,
+              name: e.name,
               projectId: data.id,
             })
           }

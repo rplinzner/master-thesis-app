@@ -5,7 +5,7 @@ import { Button, TextField } from "@mui/material";
 import { css } from "@emotion/css";
 
 type AddMicroserviceFormValues = {
-  title: string;
+  name: string;
 };
 
 interface AddMicroserviceFormProps {
@@ -27,14 +27,14 @@ const AddMicroserviceForm: FC<AddMicroserviceFormProps> = (props) => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <TextField
-          {...register("title", { required: true })}
+          {...register("name", { required: true })}
           className={css`
             margin-bottom: 2rem !important;
           `}
           autoFocus
-          label="Tytuł"
-          type="title"
-          name="title"
+          label="Nazwa"
+          type="name"
+          name="name"
           fullWidth
         />
         <Button variant="contained" type="submit" color="primary">
