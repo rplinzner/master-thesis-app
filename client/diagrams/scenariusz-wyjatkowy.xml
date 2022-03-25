@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" camunda:diagramRelationId="bfd43fad-43b2-462c-9de1-879a29163ffa">
+  <bpmn:process id="Process_21dc549d-aef3-4a66-b75d-0b503fd98c83" isExecutable="true">
+    <bpmn:subProcess id="Activity_05e3lcl">
+      <bpmn:startEvent id="Event_0g9563d" name="Dane nowego użytkownika">
+        <bpmn:outgoing>Flow_0pfx58h</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:task id="Activity_0tspgze" name="Zapisz użytkownika w bazie">
+        <bpmn:incoming>Flow_0pfx58h</bpmn:incoming>
+        <bpmn:outgoing>Flow_1lhke2s</bpmn:outgoing>
+      </bpmn:task>
+      <bpmn:sequenceFlow id="Flow_0pfx58h" sourceRef="Event_0g9563d" targetRef="Activity_0tspgze"/>
+      <bpmn:sequenceFlow id="Flow_1lhke2s" sourceRef="Activity_0tspgze" targetRef="Event_1gdml3t"/>
+      <bpmn:endEvent id="Event_1gdml3t" name="Dane zapisanego użytkownika">
+        <bpmn:incoming>Flow_1lhke2s</bpmn:incoming>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_11mjuf0"/>
+      </bpmn:endEvent>
+    </bpmn:subProcess>
+    <bpmn:boundaryEvent id="Event_1qubyhi" name="Użytkownik jest już w bazie" attachedToRef="Activity_05e3lcl">
+      <bpmn:outgoing>Flow_1napdnl</bpmn:outgoing>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_1dgyxf7"/>
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_1napdnl" sourceRef="Event_1qubyhi" targetRef="Activity_11qpm82"/>
+    <bpmn:sendTask id="Activity_11qpm82" name="Błąd z informacją o istniejącym użytkowniku">
+      <bpmn:incoming>Flow_1napdnl</bpmn:incoming>
+    </bpmn:sendTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_21dc549d-aef3-4a66-b75d-0b503fd98c83">
+      <bpmndi:BPMNEdge id="Flow_1napdnl_di" bpmnElement="Flow_1napdnl">
+        <di:waypoint x="440" y="358"/>
+        <di:waypoint x="440" y="410"/>
+        <di:waypoint x="510" y="410"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_1hcg3ji_di" bpmnElement="Activity_11qpm82">
+        <dc:Bounds x="510" y="370" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05e3lcl_di" bpmnElement="Activity_05e3lcl" isExpanded="true">
+        <dc:Bounds x="110" y="180" width="420" height="160"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0pfx58h_di" bpmnElement="Flow_0pfx58h">
+        <di:waypoint x="198" y="250"/>
+        <di:waypoint x="250" y="250"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lhke2s_di" bpmnElement="Flow_1lhke2s">
+        <di:waypoint x="350" y="250"/>
+        <di:waypoint x="422" y="250"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0g9563d_di" bpmnElement="Event_0g9563d">
+        <dc:Bounds x="162" y="232" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="146" y="275" width="68" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0tspgze_di" bpmnElement="Activity_0tspgze">
+        <dc:Bounds x="250" y="210" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_089tnir_di" bpmnElement="Event_1gdml3t">
+        <dc:Bounds x="422" y="232" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="397" y="275" width="86" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1u8k1zy_di" bpmnElement="Event_1qubyhi">
+        <dc:Bounds x="422" y="322" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="351" y="365" width="77" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

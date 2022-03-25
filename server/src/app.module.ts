@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { ProjectsModule } from './projects/projects.module';
 import { MicroservicesModule } from './microservices/microservices.module';
 import { DetailedStructuralDiagramModule } from './detailed-structural-diagram/detailed-structural-diagram.module';
+import { BusinessGoalModule } from './business-goal/business-goal.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { DetailedStructuralDiagramModule } from './detailed-structural-diagram/d
     ProjectsModule,
     MicroservicesModule,
     DetailedStructuralDiagramModule,
+    BusinessGoalModule,
   ],
   controllers: [AppController],
   providers: [AppService],

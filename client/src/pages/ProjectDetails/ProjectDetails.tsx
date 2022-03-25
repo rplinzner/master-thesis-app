@@ -15,14 +15,13 @@ import {
 import { addHighLevelStructDiagram, getById } from "api/projects";
 import { FC, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Project } from "types/Project";
 import { AddDiagramModal, DiagramViewer, Modal } from "components";
 import AddMicroserviceForm from "./AddMicroserviceForm";
 import { addMicroservice, deleteMicroservice } from "api/microservices";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StructuralDiagramsTable from "./StructuralDiagramsTable";
-import styled from "@emotion/styled";
 import AddDiagramMicroserviceExtension, {
   Values,
 } from "./AddDiagramMicroserviceExtension";
@@ -30,6 +29,7 @@ import {
   addDetailedStructuralDiagram,
   deleteDetailedStructuralDiagram,
 } from "api/detailedStructuralDiagram";
+import { Routes } from "pages/routes.enum";
 
 interface ProjectDetailsProps {
   className?: string;
@@ -38,6 +38,8 @@ interface ProjectDetailsProps {
 const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
   const { className } = props;
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
   const [addDiagramModalOpen, setAddDiagramModalOpen] = useState(false);
   const [addStructuralDiagramModalOpen, setAddStructuralDiagramModalOpen] =
     useState(false);
@@ -172,7 +174,11 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
                       </IconButton>
                     }
                   >
-                    <ListItemButton>
+                    <ListItemButton
+                      onClick={() =>
+                        navigate(Routes.MICROSERVICE.replace(":id", e.id))
+                      }
+                    >
                       <ListItemText primary={e.name} />
                     </ListItemButton>
                   </ListItem>
@@ -242,7 +248,7 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
               className={css`
                 margin-top: 1rem;
               `}
-              data={data.detailedStructuralDiagrams}
+              data={data.detailedDiagrams}
             />
           </Grid>
         </Grid>

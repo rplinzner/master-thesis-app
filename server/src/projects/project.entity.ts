@@ -30,5 +30,5 @@ export class Project {
       cascade: true,
     },
   )
-  detailedStructuralDiagrams: DetailedStructuralDiagram[];
+  detailedDiagrams: DetailedStructuralDiagram[];
 }

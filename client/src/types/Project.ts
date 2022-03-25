@@ -22,5 +22,5 @@ export interface Project {
 
   microservices: Microservice[];
 
-  detailedStructuralDiagrams: DetailedStructuralDiagram[];
+  detailedDiagrams: DetailedStructuralDiagram[];
 }

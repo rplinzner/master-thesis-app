@@ -1,5 +1,4 @@
 import { css } from "@emotion/css";
-import styled from "@emotion/styled";
 import {
   TableContainer,
   Paper,
@@ -15,7 +14,6 @@ import { DiagramViewer } from "components";
 import { FC, useState } from "react";
 import { DetailedStructuralDiagram } from "types/DetailedStructuralDiagram";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 
 interface StructuralDiagramsTableProps {
   className?: string;

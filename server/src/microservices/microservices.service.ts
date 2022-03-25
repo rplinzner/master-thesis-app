@@ -22,7 +22,13 @@ export class MicroservicesService {
     return (await this.microservicesRepository.delete(id)).affected > 0;
   }
 
-  async getById(id: string) {
-    return this.microservicesRepository.findOne({ id });
+  async getById(id: string, loadRelations = false) {
+    return this.microservicesRepository.findOne(
+      { id },
+      {
+        relations: loadRelations ? ['project'] : undefined,
+        loadEagerRelations: !loadRelations,
+      },
+    );
   }
 }

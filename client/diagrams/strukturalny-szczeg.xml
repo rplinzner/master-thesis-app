@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" camunda:diagramRelationId="ceed05d1-48c2-4566-814b-1bcf225faa32">
+  <bpmn:collaboration id="Collaboration_0ck53nn">
+    <bpmn:participant id="Participant_1lgunft" name="Obsługa zamówień" processRef="Process_81e9d35a-97ed-4d0b-acd3-f7993ec1ab68"/>
+    <bpmn:participant id="Participant_11odumc" name="Użytkownicy" processRef="Process_0ql3mb3"/>
+    <bpmn:messageFlow id="Flow_048prwy" name="Dane&#10;użytkownika" sourceRef="Participant_11odumc" targetRef="Participant_1lgunft"/>
+    <bpmn:messageFlow id="Flow_1kwvhmk" name="Uprawnienia użytkownika" sourceRef="Participant_11odumc" targetRef="Participant_1lgunft"/>
+    <bpmn:messageFlow id="Flow_1slnmcn" name="Ustawienia dostaw użytkownika" sourceRef="Participant_11odumc" targetRef="Participant_1lgunft"/>
+  </bpmn:collaboration>
+  <bpmn:process id="Process_81e9d35a-97ed-4d0b-acd3-f7993ec1ab68" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_08gzksj"/>
+  </bpmn:process>
+  <bpmn:process id="Process_0ql3mb3" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_1ltzvcb"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0ck53nn">
+      <bpmndi:BPMNShape id="Participant_1lgunft_di" bpmnElement="Participant_1lgunft" isHorizontal="true">
+        <dc:Bounds x="180" y="210" width="310" height="120"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_11odumc_di" bpmnElement="Participant_11odumc" isHorizontal="true">
+        <dc:Bounds x="180" y="510" width="310" height="120"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_048prwy_di" bpmnElement="Flow_048prwy">
+        <di:waypoint x="230" y="510"/>
+        <di:waypoint x="230" y="330"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="240" y="410" width="60" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kwvhmk_di" bpmnElement="Flow_1kwvhmk">
+        <di:waypoint x="335" y="510"/>
+        <di:waypoint x="335" y="330"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="344" y="410" width="62" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1slnmcn_di" bpmnElement="Flow_1slnmcn">
+        <di:waypoint x="430" y="510"/>
+        <di:waypoint x="430" y="330"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="440" y="404" width="60" height="40"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
