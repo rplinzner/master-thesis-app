@@ -27,8 +27,8 @@ const AddDiagramModal: FC<AddDiagramModalProps> = (props) => {
 
   return (
     <div className={className}>
-      {children}
       <Modal open={open} handleClose={handleClose}>
+        {children}
         <TextField
           value={diagramValue}
           onChange={(e) => setDiagramValue(e.target.value)}

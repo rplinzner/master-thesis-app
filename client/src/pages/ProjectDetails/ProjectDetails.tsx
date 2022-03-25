@@ -13,16 +13,23 @@ import {
   Typography,
 } from "@mui/material";
 import { addHighLevelStructDiagram, getById } from "api/projects";
-import { FC, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { Project } from "types/Project";
-import styled from "@emotion/styled";
 import { AddDiagramModal, DiagramViewer, Modal } from "components";
 import AddMicroserviceForm from "./AddMicroserviceForm";
 import { addMicroservice, deleteMicroservice } from "api/microservices";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StructuralDiagramsTable from "./StructuralDiagramsTable";
+import styled from "@emotion/styled";
+import AddDiagramMicroserviceExtension, {
+  Values,
+} from "./AddDiagramMicroserviceExtension";
+import {
+  addDetailedStructuralDiagram,
+  deleteDetailedStructuralDiagram,
+} from "api/detailedStructuralDiagram";
 
 interface ProjectDetailsProps {
   className?: string;
@@ -32,8 +39,12 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
   const { className } = props;
   const { id } = useParams<{ id: string }>();
   const [addDiagramModalOpen, setAddDiagramModalOpen] = useState(false);
+  const [addStructuralDiagramModalOpen, setAddStructuralDiagramModalOpen] =
+    useState(false);
   const [addMicroserviceModal, setAddMicroserviceModal] = useState(false);
   const [diagramViewerOpen, setDiagramViewerOpen] = useState(false);
+
+  const pickedMicroservicesValue = useRef<Values>({ "1": null, "2": null });
 
   const queryClient = useQueryClient();
 
@@ -63,6 +74,41 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
       queryClient.invalidateQueries(["project", id]);
     },
   });
+
+  const addDetailedStructuralMutation = useMutation(
+    addDetailedStructuralDiagram,
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(["project", id]);
+        setAddStructuralDiagramModalOpen(false);
+      },
+    }
+  );
+
+  const deleteDetailedStructuralMutation = useMutation(
+    deleteDetailedStructuralDiagram,
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(["project", id]);
+      },
+    }
+  );
+
+  const handleAddDiagram = (diagram: string) => {
+    const values = pickedMicroservicesValue.current;
+    if (!values[1] || !values[2] || !data?.id) {
+      alert("Wybierz oba mikroserwisy!");
+      return;
+    }
+    addDetailedStructuralMutation.mutate({
+      diagram,
+      firstMicroserviceId: values[1].id,
+      secondMicroserviceId: values[2].id,
+      projectId: data.id,
+    });
+  };
 
   if (status === "loading" || !data)
     return (
@@ -184,11 +230,15 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
                 width: 100%;
               `}
               variant="contained"
+              onClick={() => setAddStructuralDiagramModalOpen(true)}
             >
               Dodaj diagram strukturalny szczegółowy (mikroserwisy)
             </Button>
 
             <StructuralDiagramsTable
+              handleDeleteDiagram={(e) =>
+                deleteDetailedStructuralMutation.mutate(e)
+              }
               className={css`
                 margin-top: 1rem;
               `}
@@ -197,6 +247,21 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
           </Grid>
         </Grid>
       </Container>
+      <AddDiagramModal
+        open={addStructuralDiagramModalOpen}
+        handleClose={() => setAddStructuralDiagramModalOpen(false)}
+        onSave={(e) => handleAddDiagram(e)}
+      >
+        <AddDiagramMicroserviceExtension
+          onChange={(e) => {
+            pickedMicroservicesValue.current = e;
+          }}
+          className={css`
+            margin: 1rem 0;
+          `}
+          microservices={data.microservices}
+        />
+      </AddDiagramModal>
       <AddDiagramModal
         open={addDiagramModalOpen}
         handleClose={() => setAddDiagramModalOpen(false)}

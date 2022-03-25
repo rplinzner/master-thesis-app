@@ -7,12 +7,17 @@ export interface DetailedStructuralDiagram {
 
   secondMicroservice: Microservice;
 
-  diagram: string | null;
+  diagram: string;
 }
 
 export interface AddDiagramDTO {
   firstMicroserviceId: string;
   secondMicroserviceId: string;
   projectId: string;
+  diagram: string;
+}
+
+export interface UpdateDiagramDTO {
+  id: string;
   diagram: string;
 }

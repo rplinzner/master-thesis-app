@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MicroservicesService } from 'src/microservices/microservices.service';
 import { ProjectsService } from 'src/projects/projects.service';
 import { DetailedStructuralDiagramRepository } from './detailed-structural-diagram.repository';
-import { AddDiagramDTO } from './DTO/addDiagram.dto';
+import { AddDiagramDTO, UpdateDiagramDTO } from './DTO/addDiagram.dto';
 
 @Injectable()
 export class DetailedStructuralDiagramService {
@@ -32,5 +32,15 @@ export class DetailedStructuralDiagramService {
       project,
       diagram,
     );
+  }
+
+  async updateDiagram(data: UpdateDiagramDTO): Promise<boolean> {
+    const { diagram, id } = data;
+    return this.repository.updateDiagram(id, diagram);
+  }
+
+  async deleteDiagram(id: string): Promise<boolean> {
+    const { affected } = await this.repository.delete(id);
+    return affected > 0;
   }
 }

@@ -4,3 +4,8 @@ export class AddDiagramDTO {
   projectId: string;
   diagram: string;
 }
+
+export class UpdateDiagramDTO {
+  id: string;
+  diagram: string;
+}

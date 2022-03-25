@@ -20,4 +20,9 @@ export class DetailedStructuralDiagramRepository extends Repository<DetailedStru
 
     return this.save(diagram);
   }
+
+  async updateDiagram(id: string, diagram: string): Promise<boolean> {
+    const { affected } = await this.update(id, { diagram });
+    return affected > 0;
+  }
 }

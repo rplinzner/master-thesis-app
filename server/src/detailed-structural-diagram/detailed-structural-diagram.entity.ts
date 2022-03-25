@@ -3,7 +3,6 @@ import { Project } from 'src/projects/project.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
-  OneToOne,
   JoinColumn,
   ManyToOne,
   Column,
@@ -14,11 +13,11 @@ export class DetailedStructuralDiagram {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => Microservice, { eager: true })
+  @ManyToOne(() => Microservice, { eager: true, onDelete: 'CASCADE' })
   @JoinColumn()
   firstMicroservice: Microservice;
 
-  @OneToOne(() => Microservice, { eager: true })
+  @ManyToOne(() => Microservice, { eager: true, onDelete: 'CASCADE' })
   @JoinColumn()
   secondMicroservice: Microservice;
 
