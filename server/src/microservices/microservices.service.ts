@@ -27,7 +27,6 @@ export class MicroservicesService {
       { id },
       {
         relations: loadRelations ? ['project'] : undefined,
-        loadEagerRelations: !loadRelations,
       },
     );
   }

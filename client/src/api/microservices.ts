@@ -15,9 +15,12 @@ export const addMicroservice = async (
 };
 
 export const getMicroservice = async (
-  id: string
+  id: string,
+  addProject = false
 ): Promise<MicroserviceWithProject> => {
-  const res = await axios.get<MicroserviceWithProject>(`${controller}/${id}`);
+  const res = await axios.get<MicroserviceWithProject>(
+    `${controller}/${id}${addProject ? "?includeProject=true" : ""}`
+  );
   return res.data;
 };
 

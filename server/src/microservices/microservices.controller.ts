@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { AddMicroservice } from './DTO/addMicroservice.dto';
 import { Microservice } from './microservice.entity';
 import { MicroservicesService } from './microservices.service';
@@ -8,8 +16,12 @@ export class MicroservicesController {
   constructor(private readonly microservicesService: MicroservicesService) {}
 
   @Get('/:id')
-  getById(@Param('id') id: string): Promise<Microservice> {
-    return this.microservicesService.getById(id, true);
+  getById(
+    @Param('id') id: string,
+    @Query('includeProject') includeProject: string | undefined,
+  ): Promise<Microservice> {
+    const addProject = includeProject === 'true';
+    return this.microservicesService.getById(id, addProject);
   }
 
   @Post()

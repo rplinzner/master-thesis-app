@@ -29,7 +29,7 @@ const MicroserviceDetails: FC<MicroserviceDetailsProps> = (props) => {
 
   const { data, status } = useQuery<MicroserviceWithProject>(
     ["microservice", id],
-    () => getMicroservice(id!)
+    () => getMicroservice(id!, true)
   );
 
   if (status === "loading" || !data)
@@ -55,7 +55,7 @@ const MicroserviceDetails: FC<MicroserviceDetailsProps> = (props) => {
           padding-top: 2rem;
         `}
       >
-        <Typography variant="h3">Microservice: {data.name || ""}</Typography>
+        <Typography variant="h3">Mikroserwis: {data.name || ""}</Typography>
         <Link
           to={`/${data.project.id}`}
           className={css`
