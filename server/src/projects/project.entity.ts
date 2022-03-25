@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Microservice } from 'src/microservices/microservice.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class Project {
@@ -10,4 +11,12 @@ export class Project {
 
   @Column()
   description: string;
+
+  @Column('xml', { nullable: true })
+  highLevelStructDiagram: string | null;
+
+  @OneToMany(() => Microservice, (microservice) => microservice.project, {
+    eager: true,
+  })
+  microservices: Microservice[];
 }

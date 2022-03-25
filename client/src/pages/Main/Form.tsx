@@ -49,9 +49,6 @@ const Form: FC<FormProps> = (props) => {
           name="description"
           fullWidth
           multiline
-          // ref={register({
-          //   required: "Pole jest wymagane.",
-          // })}
         />
         <Button variant="contained" type="submit" color="primary">
           Utwórz

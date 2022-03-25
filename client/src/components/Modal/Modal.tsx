@@ -6,6 +6,7 @@ interface ModalProps {
   className?: string;
   open: boolean;
   handleClose?: () => void;
+  fullScreen?: boolean;
 }
 
 const style = {
@@ -22,11 +23,19 @@ const style = {
 };
 
 const Modal: FC<ModalProps> = (props) => {
-  const { className, open, children, handleClose } = props;
+  const { className, open, children, handleClose, fullScreen } = props;
+  const modalStyle: typeof style & { height?: string } = { ...style };
+
+  if (fullScreen) {
+    modalStyle.width = "95vw";
+    modalStyle.maxWidth = "unset";
+    modalStyle.height = "80vh"
+  }
+
   return (
     <div className={className}>
       <MuiModal open={open} onClose={handleClose}>
-        <Box sx={style}>{children}</Box>
+        <Box sx={modalStyle}>{children}</Box>
       </MuiModal>
     </div>
   );

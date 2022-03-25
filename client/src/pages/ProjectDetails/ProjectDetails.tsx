@@ -1,61 +1,46 @@
 import { css } from "@emotion/css";
 import { Button, Container, Divider, Grid, Typography } from "@mui/material";
-import { getById } from "api/projects";
-import { FC, useEffect, useRef } from "react";
-import { useQuery } from "react-query";
+import { addHighLevelStructDiagram, getById } from "api/projects";
+import { FC, useEffect, useRef, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { Project } from "types/Project";
 import styled from "@emotion/styled";
-import xml from "./temp";
-import ReactBpmn from "react-bpmn";
-import BpmnJS from "bpmn-js";
+import { AddDiagramModal, DiagramViewer } from "components";
+// import ReactBpmn from "react-bpmn";
+// import BpmnJS from "bpmn-js";
 
 interface ProjectDetailsProps {
   className?: string;
 }
 
-const Div = styled.div`
+const FlexDiv = styled.div`
   display: flex;
 `;
 
 const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
   const { className } = props;
   const { id } = useParams<{ id: string }>();
+  const [addDiagramModalOpen, setAddDiagramModalOpen] = useState(false);
+  const [diagramViewerOpen, setDiagramViewerOpen] = useState(false);
 
-  const { data, status } = useQuery<Project>(
-    ["project", id],
-    () => getById(id!),
-    { onSuccess: console.log }
+  const queryClient = useQueryClient();
+
+  const { data, status } = useQuery<Project>(["project", id], () =>
+    getById(id!)
   );
 
-  const viewer = useRef(new BpmnJS());
+  const mutation = useMutation(addHighLevelStructDiagram, {
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries(["project", id]);
+      setAddDiagramModalOpen(false);
+    },
+  });
 
-  useEffect(() => {
-    if (status === "loading") return;
+  
 
-    async function inner() {
-      try {
-        const { warnings } = await viewer.current.importXML(xml);
-        const canvas = viewer.current.get("canvas");
-        canvas.zoom("fit-viewport");
-        if (warnings.length) {
-          const arr = warnings as any[];
-          const text = arr.reduce((acc, next) => {
-            return `${acc}\n${next.message}`;
-          }, "BPMN Viewer ERROR:");
-          window.alert(text);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    viewer.current.attachTo("div.bpmn-container");
-    inner();
-
-  }, [status]);
-
-  if (status === "loading")
+  if (status === "loading" || !data)
     return (
       <Container
         maxWidth="xl"
@@ -77,8 +62,8 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
           padding-top: 2rem;
         `}
       >
-        <Typography variant="h3">{data?.title || ""}</Typography>
-        <Typography variant="body1">{data?.description || ""}</Typography>
+        <Typography variant="h3">{data.title || ""}</Typography>
+        <Typography variant="body1">{data.description || ""}</Typography>
         <Divider
           className={css`
             margin-top: 2rem !important;
@@ -105,16 +90,20 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
             <Typography mb={2} variant="h5">
               Diagramy
             </Typography>
-            <Div>
+            <FlexDiv>
               <Button
                 className={css`
                   width: 50%;
                   margin-right: 0.5rem !important;
                 `}
                 variant="contained"
+                onClick={() => setAddDiagramModalOpen(true)}
               >
-                Dodaj diagram strukturalny wysokiego poziomu
+                {`${
+                  data.highLevelStructDiagram ? "Zmień" : "Dodaj"
+                } diagram strukturalny wysokiego poziomu`}
               </Button>
+
               <Button
                 className={css`
                   width: 50%;
@@ -124,7 +113,27 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
               >
                 Dodaj diagram strukturalny szczegółowy (mikroserwisy)
               </Button>
-            </Div>
+            </FlexDiv>
+            <Divider
+              className={css`
+                margin: 1rem 0rem !important;
+              `}
+            />
+            {data.highLevelStructDiagram ? (
+              <Button
+                variant="outlined"
+                onClick={() => setDiagramViewerOpen(true)}
+                className={css`
+                  width: 100%;
+                `}
+              >
+                Wyświetl diagram strukturalny wysokiego poziomu
+              </Button>
+            ) : (
+              <Typography fontWeight="bold" my={2} variant="body1">
+                Brak diagramu strukturalnego wysokiego poziomu!
+              </Typography>
+            )}
           </Grid>
         </Grid>
         {/* <div
@@ -133,11 +142,24 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
         >
           <ReactBpmn diagramXML={xml} onShown={console.log} />
         </div> */}
-        <div
+        {/* <div
           style={{ height: "500px", marginTop: "50px" }}
           className="bpmn-container"
-        ></div>
+        ></div> */}
       </Container>
+      <AddDiagramModal
+        open={addDiagramModalOpen}
+        handleClose={() => setAddDiagramModalOpen(false)}
+        onSave={(e) => mutation.mutate({ id: data.id, diagram: e })}
+        initialValue={data.highLevelStructDiagram}
+      />
+      {data.highLevelStructDiagram && (
+        <DiagramViewer
+          handleClose={() => setDiagramViewerOpen(false)}
+          open={diagramViewerOpen}
+          xml={data.highLevelStructDiagram}
+        />
+      )}
     </div>
   );
 };

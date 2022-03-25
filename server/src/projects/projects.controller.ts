@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CreateProjectDto } from './create-project.dto';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { AddHighLevelStructDiagram } from './DTO/addHighLevelStructDiagram.dto';
+import { CreateProjectDto } from './DTO/create-project.dto';
 import { Project } from './project.entity';
 import { ProjectsService } from './projects.service';
 
@@ -20,5 +21,12 @@ export class ProjectsController {
   @Post()
   createProject(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
     return this.projectsService.createProject(createProjectDto);
+  }
+
+  @Patch('/highLevelStructDiagram')
+  addHighLevelStructDiagram(
+    @Body() createProjectDto: AddHighLevelStructDiagram,
+  ): Promise<boolean> {
+    return this.projectsService.addHighLevelStructDiagram(createProjectDto);
   }
 }

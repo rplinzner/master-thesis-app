@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateProjectDto } from './create-project.dto';
+import { AddHighLevelStructDiagram } from './DTO/addHighLevelStructDiagram.dto';
+import { CreateProjectDto } from './DTO/create-project.dto';
 import { ProjectsRepository } from './projects.repository';
 
 @Injectable()
@@ -12,6 +13,10 @@ export class ProjectsService {
 
   createProject(project: CreateProjectDto) {
     return this.projectsRepository.createProject(project);
+  }
+
+  addHighLevelStructDiagram({ diagram, id }: AddHighLevelStructDiagram) {
+    return this.projectsRepository.addHighLevelStructDiagram(id, diagram);
   }
 
   getAllProjects() {

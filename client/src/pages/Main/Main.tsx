@@ -69,7 +69,12 @@ const Main: FC<MainProps> = (props: MainProps) => {
           )}
           {data?.map((e) => (
             <Grid item key={e.id}>
-              <ProjectCard title={e.title} description={e.description} id={e.id} />
+              <ProjectCard
+                diagram={e.highLevelStructDiagram}
+                title={e.title}
+                description={e.description}
+                id={e.id}
+              />
             </Grid>
           )) || "Error :("}
         </Grid>
