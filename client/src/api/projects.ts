@@ -33,3 +33,8 @@ export const getById = async (id: string): Promise<Project> => {
   const res = await axios.get(`${controller}/${id}`);
   return res.data;
 };
+
+export const deleteProject = async (id: string): Promise<boolean> => {
+  const res = await axios.delete(`${controller}/${id}`);
+  return res.data;
+};

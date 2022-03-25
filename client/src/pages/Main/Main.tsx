@@ -4,7 +4,7 @@ import { css } from "@emotion/css";
 import { Modal, ProjectCard } from "components";
 import Form from "./Form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { addNewProject, getAll } from "api/projects";
+import { addNewProject, deleteProject, getAll } from "api/projects";
 import { Project } from "types/Project";
 
 interface MainProps {
@@ -27,6 +27,13 @@ const Main: FC<MainProps> = (props: MainProps) => {
       // Invalidate and refetch
       queryClient.invalidateQueries("projects");
       setModalOpen(false);
+    },
+  });
+
+  const deleteMutation = useMutation(deleteProject, {
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries("projects");
     },
   });
 
@@ -70,6 +77,7 @@ const Main: FC<MainProps> = (props: MainProps) => {
           {data?.map((e) => (
             <Grid item key={e.id}>
               <ProjectCard
+                onDelete={(e) => deleteMutation.mutate(e)}
                 diagram={e.highLevelStructDiagram}
                 title={e.title}
                 description={e.description}

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { AddHighLevelStructDiagram } from './DTO/addHighLevelStructDiagram.dto';
 import { CreateProjectDto } from './DTO/create-project.dto';
 import { Project } from './project.entity';
@@ -28,5 +36,10 @@ export class ProjectsController {
     @Body() createProjectDto: AddHighLevelStructDiagram,
   ): Promise<boolean> {
     return this.projectsService.addHighLevelStructDiagram(createProjectDto);
+  }
+
+  @Delete('/:id')
+  deleteProject(@Param('id') id: string) {
+    return this.projectsService.deleteProject(id);
   }
 }

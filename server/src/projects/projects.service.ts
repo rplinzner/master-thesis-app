@@ -26,4 +26,9 @@ export class ProjectsService {
   getById(id: string) {
     return this.projectsRepository.findOne({ id });
   }
+
+  async deleteProject(id: string) {
+    const { affected } = await this.projectsRepository.delete(id);
+    return affected;
+  }
 }

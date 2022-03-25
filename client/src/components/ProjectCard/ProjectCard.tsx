@@ -2,13 +2,14 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
+import { CardActionArea, CardActions, IconButton } from "@mui/material";
 import projectIcon from "assets/project.png";
 import { css } from "@emotion/css";
 import { FC, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import BpmnJS from "bpmn-js";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const BpmnDiv = styled.div`
   height: 140px;
@@ -18,12 +19,14 @@ interface ProjectCardProps {
   description: string;
   id: string;
   diagram?: string | null;
+  onDelete: (id: string) => void;
 }
 
 const ProjectCard: FC<ProjectCardProps> = (props) => {
-  const { description, title, id, diagram } = props;
+  const { description, title, id, diagram, onDelete } = props;
   const navigate = useNavigate();
 
+  const container = useRef<HTMLDivElement>(null);
   const viewer = useRef(new BpmnJS());
 
   useEffect(() => {
@@ -46,7 +49,7 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
       }
     }
 
-    viewer.current.attachTo("div#bpmn-viewer-card");
+    viewer.current.attachTo(container.current);
     inner();
   }, [diagram]);
 
@@ -67,7 +70,7 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
           />
         )}
         <CardContent>
-          {diagram && <BpmnDiv id="bpmn-viewer-card"/>}
+          {diagram && <BpmnDiv ref={container} />}
 
           <Typography gutterBottom variant="h5" component="div">
             {title}
@@ -77,6 +80,11 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
           </Typography>
         </CardContent>
       </CardActionArea>
+      <CardActions disableSpacing>
+        <IconButton onClick={() => onDelete(id)}>
+          <DeleteIcon />
+        </IconButton>
+      </CardActions>
     </Card>
   );
 };
