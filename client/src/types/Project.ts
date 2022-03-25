@@ -1,3 +1,5 @@
+import { Microservice } from "./Microservice";
+
 export interface CreateProjectDto {
   title: string;
   description: string;
@@ -8,7 +10,6 @@ export interface AddHighLevelStructDiagram {
   diagram: string;
 }
 
-
 export interface Project {
   id: string;
 
@@ -17,4 +18,6 @@ export interface Project {
   description: string;
 
   highLevelStructDiagram: string | null;
+
+  microservices: Microservice[];
 }

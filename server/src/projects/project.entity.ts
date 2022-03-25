@@ -17,6 +17,7 @@ export class Project {
 
   @OneToMany(() => Microservice, (microservice) => microservice.project, {
     eager: true,
+    cascade: true,
   })
   microservices: Microservice[];
 }

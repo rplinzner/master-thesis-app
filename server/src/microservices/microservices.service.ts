@@ -11,9 +11,14 @@ export class MicroservicesService {
     private readonly microservicesRepository: MicroservicesRepository,
     private readonly projectsService: ProjectsService,
   ) {}
+
   async addMicroservice(body: AddMicroservice) {
     const { name, projectId } = body;
     const project = await this.projectsService.getById(projectId);
     return this.microservicesRepository.addMicroService(name, project);
+  }
+
+  async deleteMicroservice(id: string) {
+    return (await this.microservicesRepository.delete(id)).affected > 0;
   }
 }

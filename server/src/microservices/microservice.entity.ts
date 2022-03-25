@@ -11,6 +11,7 @@ export class Microservice {
 
   @ManyToOne(() => Project, (project) => project.microservices, {
     eager: false,
+    onDelete: 'CASCADE',
   })
   project: Project;
 }

@@ -1,14 +1,27 @@
 import { css } from "@emotion/css";
-import { Button, Container, Divider, Grid, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  Divider,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { addHighLevelStructDiagram, getById } from "api/projects";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { Project } from "types/Project";
 import styled from "@emotion/styled";
-import { AddDiagramModal, DiagramViewer } from "components";
-// import ReactBpmn from "react-bpmn";
-// import BpmnJS from "bpmn-js";
+import { AddDiagramModal, DiagramViewer, Modal } from "components";
+import AddMicroserviceForm from "./AddMicroserviceForm";
+import { addMicroservice, deleteMicroservice } from "api/microservices";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface ProjectDetailsProps {
   className?: string;
@@ -22,6 +35,7 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
   const { className } = props;
   const { id } = useParams<{ id: string }>();
   const [addDiagramModalOpen, setAddDiagramModalOpen] = useState(false);
+  const [addMicroserviceModal, setAddMicroserviceModal] = useState(false);
   const [diagramViewerOpen, setDiagramViewerOpen] = useState(false);
 
   const queryClient = useQueryClient();
@@ -30,7 +44,7 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
     getById(id!)
   );
 
-  const mutation = useMutation(addHighLevelStructDiagram, {
+  const addDiagramMutation = useMutation(addHighLevelStructDiagram, {
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries(["project", id]);
@@ -38,7 +52,20 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
     },
   });
 
-  
+  const addMicroserviceMutation = useMutation(addMicroservice, {
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries(["project", id]);
+      setAddMicroserviceModal(false);
+    },
+  });
+
+  const deleteMicroserviceMutation = useMutation(deleteMicroservice, {
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries(["project", id]);
+    },
+  });
 
   if (status === "loading" || !data)
     return (
@@ -75,7 +102,40 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
             <Typography mb={2} variant="h5">
               Mikroserwisy
             </Typography>
-            <Button variant="contained">Dodaj mikroserwis</Button>
+            <Button
+              onClick={() => setAddMicroserviceModal(true)}
+              variant="contained"
+            >
+              Dodaj mikroserwis
+            </Button>
+            <Paper
+              className={css`
+                margin: 1rem 0;
+              `}
+              hidden={!data.microservices.length}
+            >
+              <List>
+                {data.microservices.map((e) => (
+                  <ListItem
+                    disablePadding
+                    key={e.id}
+                    secondaryAction={
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => deleteMicroserviceMutation.mutate(e.id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    }
+                  >
+                    <ListItemButton>
+                      <ListItemText primary={e.name} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </Paper>
           </Grid>
           <Grid item display="flex" justifyContent="center" xs={1}>
             <Divider
@@ -136,23 +196,27 @@ const ProjectDetails: FC<ProjectDetailsProps> = (props) => {
             )}
           </Grid>
         </Grid>
-        {/* <div
-          style={{ height: "500px", marginTop: "50px" }}
-          className="bpmn-container"
-        >
-          <ReactBpmn diagramXML={xml} onShown={console.log} />
-        </div> */}
-        {/* <div
-          style={{ height: "500px", marginTop: "50px" }}
-          className="bpmn-container"
-        ></div> */}
       </Container>
       <AddDiagramModal
         open={addDiagramModalOpen}
         handleClose={() => setAddDiagramModalOpen(false)}
-        onSave={(e) => mutation.mutate({ id: data.id, diagram: e })}
+        onSave={(e) => addDiagramMutation.mutate({ id: data.id, diagram: e })}
         initialValue={data.highLevelStructDiagram}
       />
+      <Modal
+        open={addMicroserviceModal}
+        handleClose={() => setAddMicroserviceModal(false)}
+      >
+        <AddMicroserviceForm
+          handleClose={() => setAddMicroserviceModal(false)}
+          onSubmit={(e) =>
+            addMicroserviceMutation.mutate({
+              name: e.title,
+              projectId: data.id,
+            })
+          }
+        />
+      </Modal>
       {data.highLevelStructDiagram && (
         <DiagramViewer
           handleClose={() => setDiagramViewerOpen(false)}
