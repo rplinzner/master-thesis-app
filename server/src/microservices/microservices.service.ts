@@ -23,11 +23,15 @@ export class MicroservicesService {
   }
 
   async getById(id: string, loadRelations = false) {
-    return this.microservicesRepository.findOne(
+    const res = await this.microservicesRepository.findOne(
       { id },
       {
         relations: loadRelations ? ['project'] : undefined,
       },
     );
+
+    res.goals.sort((a, b) => a.name.localeCompare(b.name));
+
+    return res;
   }
 }

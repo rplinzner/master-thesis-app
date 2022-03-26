@@ -9,3 +9,8 @@ export interface BusinessGoal {
 
   exceptionScenario: string | null;
 }
+
+export interface CreateBusinessGoalDTO {
+  microserviceId: string;
+  name: string;
+}

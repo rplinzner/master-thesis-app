@@ -22,6 +22,7 @@ const AddDiagramModal: FC<AddDiagramModalProps> = (props) => {
   const [diagramValue, setDiagramValue] = useState(initialValue || "");
 
   const handleSave = () => {
+    setDiagramValue("");
     onSave(diagramValue);
   };
 
